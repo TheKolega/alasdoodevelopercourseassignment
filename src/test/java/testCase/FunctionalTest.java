@@ -14,6 +14,9 @@ import org.openqa.selenium.opera.OperaDriver;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+
+
 /**
  * <strong>testCase.FunctionalTest</strong> handles setup and teardown of WebDriver.
  *

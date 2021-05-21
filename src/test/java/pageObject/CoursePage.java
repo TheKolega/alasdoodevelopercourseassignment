@@ -9,8 +9,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
-
 public class CoursePage extends PageObject {
 
     private final String pageLoadedText = "";
@@ -66,10 +64,20 @@ public class CoursePage extends PageObject {
     @CacheLookup
     private WebElement save;
 
+    public CoursePage() {
+        super();
+    }
 
     public CoursePage(WebDriver driver) {
         super(driver);
-        assertTrue(courses.isDisplayed());
+    }
+
+    public CoursePage(WebDriver driver, Map<String, String> data) {
+        super(driver, data);
+    }
+
+    public CoursePage(WebDriver driver, Map<String, String> data, int timeout) {
+        super(driver, data, timeout);
     }
 
     public boolean isInitialized() {
