@@ -16,7 +16,7 @@ public class CourseTest extends FunctionalTest {
     }
 
     @Test
-    @Order(1)
+    @Order(7)
     public void createCourse() {
         System.out.println("CourseTest1");
 
@@ -26,7 +26,7 @@ public class CourseTest extends FunctionalTest {
     }
 
     @Test
-    @Order(2)
+    @Order(8)
     public void updateCourse() {
         System.out.println("CourseTest2");
 
@@ -38,7 +38,7 @@ public class CourseTest extends FunctionalTest {
     }
 
     @Test
-    @Order(3)
+    @Order(9)
     public void deleteCourse() {
         System.out.println("CourseTest3");
 

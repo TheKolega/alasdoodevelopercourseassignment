@@ -16,7 +16,7 @@ public class TeacherTest extends FunctionalTest {
     }
 
     @Test
-    @Order(1)
+    @Order(4)
     public void createTeacher() {
         page.clickTeachersLink();//! needed?
         page.clickAddButton();
@@ -24,7 +24,7 @@ public class TeacherTest extends FunctionalTest {
     }
 
     @Test
-    @Order(2)
+    @Order(5)
     public void updateTeacher() {
         page.clickTeachersLink(); //! needed?
         page.clickEntryFirst();
@@ -34,7 +34,7 @@ public class TeacherTest extends FunctionalTest {
     }
 
     @Test
-    @Order(3)
+    @Order(6)
     public void deleteTeacher() {
         page.clickTeachersLink(); //! needed?
         page.clickEntryFirst();
