@@ -35,6 +35,15 @@ build/
 ### Node.js ###
 **/node_modules
 
+### Yarn ###
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # testing
 /src/frontend/coverage
 

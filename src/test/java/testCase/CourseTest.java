@@ -1,18 +1,24 @@
 package testCase;
 
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 import pageObject.CoursePage;
 
-import static org.junit.Assert.assertTrue;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CourseTest extends FunctionalTest {
 
-    private CoursePage page = new CoursePage(driver);
+    CoursePage page;
+
+    @BeforeEach
+    public void setupEachCourseTest() {
+        driver.get("http://localhost:3000/course");
+        page = new CoursePage(driver);
+//        assertTrue(page.isInitialized());
+    }
 
     @Test
+    @Order(1)
     public void createCourse() {
-        driver.get("http://localhost:3000/course");
-        assertTrue(page.isInitialized());
+        System.out.println("CourseTest1");
 
         page.clickCoursesLink();//! needed?
         page.clickAddButton();
@@ -20,9 +26,9 @@ public class CourseTest extends FunctionalTest {
     }
 
     @Test
+    @Order(2)
     public void updateCourse() {
-        driver.get("http://localhost:3000/course");
-        assertTrue(page.isInitialized());
+        System.out.println("CourseTest2");
 
         page.clickCoursesLink(); //! needed?
         page.clickEntryFirst();
@@ -32,9 +38,9 @@ public class CourseTest extends FunctionalTest {
     }
 
     @Test
+    @Order(3)
     public void deleteCourse() {
-        driver.get("http://localhost:3000/course");
-        assertTrue(page.isInitialized());
+        System.out.println("CourseTest3");
 
         page.clickCoursesLink(); //! needed?
         page.clickEntryFirst();

@@ -1,29 +1,23 @@
 package testCase;
 
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import pageObject.StudentPage;
-
-import static org.junit.Assert.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentTest extends FunctionalTest {
 
-    private StudentPage page = new StudentPage(driver);
+    private StudentPage page;
 
-    @BeforeAll
-	public static void driverGet() {
-		driver.get("http://localhost:3000/student");
-	}
+    @BeforeEach
+    public void setupEachStudentTest() {
+        driver.get("http://localhost:3000/student");
+        page = new StudentPage(driver);
+//        assertTrue(page.isInitialized());
+    }
 
     @Test
     @Order(1)
     public void createStudent() {
-        assertTrue(page.isInitialized());
-
         page.clickStudentsLink();//! needed?
         page.clickAddButton();
         page.fillAndSubmit();
@@ -32,8 +26,6 @@ public class StudentTest extends FunctionalTest {
     @Test
     @Order(2)
     public void updateStudent() {
-        assertTrue(page.isInitialized());
-
         page.clickStudentsLink(); //! needed?
         page.clickEntryFirst();
         page.setNameTextField("nameUpdated");
@@ -44,9 +36,7 @@ public class StudentTest extends FunctionalTest {
     @Test
     @Order(3)
     public void deleteStudent() {
-        assertTrue(page.isInitialized());
-
-        page.clickStudentsLink(); //! needed?
+         page.clickStudentsLink(); //! needed?
         page.clickEntryFirst();
         page.clickDeleteButton();
     }

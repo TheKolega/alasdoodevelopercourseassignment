@@ -19,19 +19,21 @@ public class TeacherPage extends PageObject {
     private WebDriver driver;
     private int timeout = 15;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(1) .MuiTypography-root")
+    //! map values to data
+
+    @FindBy(linkText = "Students")
     @CacheLookup
     private WebElement students;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(2) .MuiTypography-root")
+    @FindBy(linkText = "Teachers")
     @CacheLookup
     private WebElement teachers;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(3) .MuiTypography-root")
+    @FindBy(linkText = "Courses")
     @CacheLookup
     private WebElement courses;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(4) .MuiTypography-root")
+    @FindBy(linkText = "Settings")
     @CacheLookup
     private WebElement settings;
 
@@ -48,11 +50,11 @@ public class TeacherPage extends PageObject {
     @CacheLookup
     private WebElement delete;
 
-    @FindBy(id = "formik-text-field-142")
+    @FindBy(name = "teacherEmail")
     @CacheLookup
     private WebElement email;
 
-    @FindBy(id = "formik-text-field-138")
+    @FindBy(name = "teacherName")
     @CacheLookup
     private WebElement name;
 
@@ -61,7 +63,7 @@ public class TeacherPage extends PageObject {
     private WebElement save;
 
 
-    @FindBy(id = "formik-text-field-140")
+    @FindBy(name = "teacherSurname")
     @CacheLookup
     private WebElement surname;
 
@@ -175,11 +177,17 @@ public class TeacherPage extends PageObject {
      * @return the TeacherPage class instance.
      */
     public TeacherPage fill() {
-        setNameTextField();
-        setSurnameTextField();
-        setEmailEmailField();
+        setNameTextField("TeacherName");
+        setSurnameTextField("TeacherSurname");
+        setEmailEmailField("tea@cher.com");
         return this;
     }
+//    public TeacherPage fill() {
+//        setNameTextField();
+//        setSurnameTextField();
+//        setEmailEmailField();
+//        return this;
+//    }
 
     /**
      * Fill every fields in the page and submit it to target page.

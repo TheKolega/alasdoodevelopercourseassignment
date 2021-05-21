@@ -1,32 +1,31 @@
 package testCase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import pageObject.StudentPage;
+import org.junit.jupiter.api.*;
 import pageObject.TeacherPage;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TeacherTest extends FunctionalTest {
 
-    private TeacherPage page = new TeacherPage(driver);
+    private TeacherPage page;
+
+    @BeforeEach
+    public void setupEachTeacherTest() {
+        driver.get("http://localhost:3000/teacher");
+        page = new TeacherPage(driver);
+//        assertTrue(page.isInitialized());
+    }
 
     @Test
+    @Order(1)
     public void createTeacher() {
-        driver.get("http://localhost:3000/teacher");
-        assertTrue(page.isInitialized());
-
-
         page.clickTeachersLink();//! needed?
         page.clickAddButton();
         page.fillAndSubmit();
     }
 
     @Test
+    @Order(2)
     public void updateTeacher() {
-        driver.get("http://localhost:3000/teacher");
-        assertTrue(page.isInitialized());
-
         page.clickTeachersLink(); //! needed?
         page.clickEntryFirst();
         page.setNameTextField("nameUpdated");
@@ -35,11 +34,8 @@ public class TeacherTest extends FunctionalTest {
     }
 
     @Test
+    @Order(3)
     public void deleteTeacher() {
-        driver.get("http://localhost:3000/teacher");
-        assertTrue(page.isInitialized());
-
-
         page.clickTeachersLink(); //! needed?
         page.clickEntryFirst();
         page.clickDeleteButton();

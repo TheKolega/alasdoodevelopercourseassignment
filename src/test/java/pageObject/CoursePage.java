@@ -19,6 +19,8 @@ public class CoursePage extends PageObject {
     private WebDriver driver;
     private int timeout = 15;
 
+    //! map values to data : course name, class per week, cost per class
+
     //! linkText?
     @FindBy(linkText = "Students")
     @CacheLookup
@@ -44,17 +46,17 @@ public class CoursePage extends PageObject {
     @CacheLookup
     private WebElement entryFirst;
 
-    @FindBy(id = "formik-text-field-116")
+    @FindBy(name = "classesPerWeek")
     @CacheLookup
-    private WebElement classPerWeek;
+    private WebElement classesPerWeek;
 
-    @FindBy(id = "formik-text-field-114")
+    @FindBy(name = "costPerClass")
     @CacheLookup
     private WebElement costPerClass;
 
-    @FindBy(id = "formik-text-field-112")
+    @FindBy(name = "developerCourseName")
     @CacheLookup
-    private WebElement courseName;
+    private WebElement developerCourseName;
 
     @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary")
     @CacheLookup
@@ -160,11 +162,17 @@ public class CoursePage extends PageObject {
      * @return the CoursePage class instance.
      */
     public CoursePage fill() {
-        setCourseNameTextField();
-        setCostPerClassNumberField();
-        setClassPerWeekNumberField();
+        setCourseNameTextField("CourseName");
+        setCostPerClassNumberField("41");
+        setClassPerWeekNumberField("41");
         return this;
     }
+//    public CoursePage fill() {
+//        setCourseNameTextField();
+//        setCostPerClassNumberField();
+//        setClassPerWeekNumberField();
+//        return this;
+//    }
 
     /**
      * Fill every fields in the page and submit it to target page.
@@ -191,7 +199,7 @@ public class CoursePage extends PageObject {
      * @return the CoursePage class instance.
      */
     public CoursePage setClassPerWeekNumberField(String classPerWeekValue) {
-        classPerWeek.sendKeys(classPerWeekValue);
+        classesPerWeek.sendKeys(classPerWeekValue);
         return this;
     }
 
@@ -229,7 +237,7 @@ public class CoursePage extends PageObject {
      * @return the CoursePage class instance.
      */
     public CoursePage setCourseNameTextField(String courseNameValue) {
-        courseName.sendKeys(courseNameValue);
+        developerCourseName.sendKeys(courseNameValue);
         return this;
     }
 

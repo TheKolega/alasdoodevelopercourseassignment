@@ -19,19 +19,25 @@ public class StudentPage extends PageObject {
     private WebDriver driver;
     private int timeout = 15;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(1) .MuiTypography-root")
+    public String getPageUrl() {
+        return pageUrl;
+    }
+
+    //! map values to data
+
+    @FindBy(linkText = "Students")
     @CacheLookup
     private WebElement students;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(2) .MuiTypography-root")
+    @FindBy(linkText = "Teachers")
     @CacheLookup
     private WebElement teachers;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(3) .MuiTypography-root")
+    @FindBy(linkText = "Courses")
     @CacheLookup
     private WebElement courses;
 
-    @FindBy(css = ".MuiButtonBase-root:nth-child(4) .MuiTypography-root")
+    @FindBy(linkText = "Settings")
     @CacheLookup
     private WebElement settings;
 
@@ -43,42 +49,45 @@ public class StudentPage extends PageObject {
     @CacheLookup
     private WebElement entryFirst;
 
-    @FindBy(id = "formik-text-field-122")
-    @CacheLookup
-    private WebElement accountName;
-
-    @FindBy(id = "formik-text-field-126")
-    @CacheLookup
-    private WebElement bankCardNumber;
-
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary")
-    @CacheLookup
-    private WebElement delete;
-
-    @FindBy(id = "formik-text-field-124")
-    @CacheLookup
-    private WebElement email;
-
-    @FindBy(id = "formik-text-field-118")
+    @FindBy(name = "name")
     @CacheLookup
     private WebElement name;
 
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
-    @CacheLookup
-    private WebElement save;
-
-    @FindBy(id = "formik-text-field-120")
+    @FindBy(name = "surname")
     @CacheLookup
     private WebElement surname;
 
+    @FindBy(name = "accountName")
+    @CacheLookup
+    private WebElement accountName;
+
+    @FindBy(name = "email")
+    @CacheLookup
+    private WebElement email;
+
+    @FindBy(name = "bankCardNumber")
+    @CacheLookup
+    private WebElement bankCardNumber;
 
     @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-text")
+//    @FindBy(linkText = "Courses")
     @CacheLookup
     private WebElement toggleCourses;
 
+    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
+//    @FindBy(linkText = "Save")
+    @CacheLookup
+    private WebElement save;
+
+    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary")
+//    @FindBy(linkText = "Delete")
+    @CacheLookup
+    private WebElement delete;
+
+
     public StudentPage(WebDriver driver) {
         super(driver);
-        //assertTrue(students.isDisplayed()); //! asserts?
+        assertTrue(students.isDisplayed());
     }
 
     public boolean isInitialized() {
@@ -181,13 +190,21 @@ public class StudentPage extends PageObject {
      * @return the StudentPage class instance.
      */
     public StudentPage fill() {
-        setNameTextField();
-        setSurnameTextField();
-        setAccountNameTextField();
-        setEmailEmailField();
-        setBankCardNumberTextField();
+        setNameTextField("StudentName");
+        setSurnameTextField("StudentSurname");
+        setAccountNameTextField("name_surname");
+        setEmailEmailField("stu@dent.com");
+        setBankCardNumberTextField("4141");
         return this;
     }
+//    public StudentPage fill() {
+//        setNameTextField();
+//        setSurnameTextField();
+//        setAccountNameTextField();
+//        setEmailEmailField();
+//        setBankCardNumberTextField();
+//        return this;
+//    }
 
     /**
      * Fill every fields in the page and submit it to target page.
