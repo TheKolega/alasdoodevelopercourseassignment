@@ -1,7 +1,7 @@
 package testCase;
 
 import com.microsoft.edge.seleniumtools.EdgeDriver;
-import com.microsoft.edge.seleniumtools.EdgeOptions;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,11 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -22,21 +20,24 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Milos
  */
+//@ExtendWith(SeleniumJupiter.class)
 public class FunctionalTest {
 
-    protected static WebDriver driver;
+    protected WebDriver driver;
+    static WebDriverWait wait;
 
-    final String firefox = "firefox";
-    private static final Path pathFirefox = Path.of("src/test/resources/webdrivers_linux/geckodriver");
 
-    final String chrome = "chrome";
-    private static final Path pathChrome = Path.of("src/test/resources/webdrivers_linux/chromedriver");
+    final static String firefox = "firefox";
+//    private static final Path pathFirefox = Path.of("src/test/resources/webdrivers_linux/geckodriver");
 
-    final String opera = "opera";
-    private static final Path pathOpera = Path.of("src/test/resources/webdrivers_linux/operadriver");
+    final static String chrome = "chrome";
+//    private static final Path pathChrome = Path.of("src/test/resources/webdrivers_linux/chromedriver");
 
-    final String edge = "edge";
-    private static final Path pathEdge = Path.of("src/test/resources/webdrivers_linux/msedgedriver");
+    final static String opera = "opera";
+//    private static final Path pathOpera = Path.of("src/test/resources/webdrivers_linux/operadriver");
+
+    final static String edge = "edge";
+//    private static final Path pathEdge = Path.of("src/test/resources/webdrivers_linux/msedgedriver");
 
     //static Path path = FileSystems.getDefault().getPath("webdrivers_linux/geckodriver");
 
@@ -60,47 +61,56 @@ public class FunctionalTest {
     public static void setupAll() {
         System.out.println("BeforeAll");
 
-        System.setProperty("webdriver.gecko.driver", pathFirefox.toString());
-
-        System.setProperty("webdriver.chrome.driver", pathChrome.toString());
-
-        System.setProperty("webdriver.opera.driver", pathOpera.toString());
-
-        System.setProperty("webdriver.edge.driver", pathEdge.toString());
+//        System.setProperty("webdriver.gecko.driver", pathFirefox.toString());
+//        System.setProperty("webdriver.chrome.driver", pathChrome.toString());
+//        System.setProperty("webdriver.opera.driver", pathOpera.toString());
+//        System.setProperty("webdriver.edge.driver", pathEdge.toString());
     }
 
     @BeforeEach
     public void setupEach() {
         System.out.println("BeforeEach");
+
         switch (System.getProperty("browserFamily")) {
             case firefox: {
+                System.setProperty("sel.jup.default.browser", "firefox");
+                WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
                 break;
             }
             case chrome: {
+                System.setProperty("sel.jup.default.browser", "chrome");
+                WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
                 break;
             }
             case opera: {
 //                OperaOptions options = new OperaOptions();
 //                options.addArguments("--no-sandbox");
+                System.setProperty("sel.jup.default.browser", "opera");
+                WebDriverManager.operadriver().setup();
                 driver = new OperaDriver();
                 break;
             }
             case edge: {
-                EdgeOptions options = new EdgeOptions();
-                options.addArguments("--no-sandbox");
+//                EdgeOptions options = new EdgeOptions();
+//                options.addArguments("--no-sandbox");
+                System.setProperty("sel.jup.default.browser", "edge");
+                WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
                 break;
             }
             default: {
+                System.setProperty("sel.jup.default.browser", "firefox");
+                WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
             }
         }
 
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 20);
+//        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 //        driver.manage().window().maximize();
     }
 

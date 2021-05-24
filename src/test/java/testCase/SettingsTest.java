@@ -2,6 +2,7 @@ package testCase;
 
 import org.junit.jupiter.api.*;
 import pageObject.SettingsPage;
+import pageObject.StudentPage;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SettingsTest extends FunctionalTest {
@@ -9,10 +10,11 @@ public class SettingsTest extends FunctionalTest {
     private SettingsPage page;
 
     @BeforeEach
-    public void setupEachStudentTest() {
-        driver.get("http://localhost:3000/student");
-        page = new SettingsPage(driver);
-        Assertions.assertTrue(page.isInitialized());
+    public void setupEachSettingsTest() {
+        driver.get("http://localhost:3000/settings");
+        StudentPage parent = new StudentPage(driver);
+        page = new SettingsPage(driver, parent);
+        page.get();
     }
 
     @Test

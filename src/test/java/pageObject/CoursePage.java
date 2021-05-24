@@ -1,23 +1,52 @@
 package pageObject;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Map;
 
-public class CoursePage extends PageObject {
+public class CoursePage extends PageObject<CoursePage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = "/course";
+    private final String pageUrl = getBaseUrl() + "/course";
     private Map<String, String> data;
     private WebDriver driver;
     private int timeout = 15;
-
     //! map values to data : course name, class per week, cost per class
+
+    public CoursePage(WebDriver driver) {
+        super(driver);
+    }
+
+//    public CoursePage() {
+//        super();
+//    }
+//
+//    public CoursePage(WebDriver driver, Map<String, String> data) {
+//        super(driver, data);
+//    }
+//
+//    public CoursePage(WebDriver driver, Map<String, String> data, int timeout) {
+//        super(driver, data, timeout);
+//    }
+//
+    public boolean isInitialized() {
+        return courses.isDisplayed();
+    }
+
+    @Override
+    protected void load() {
+        this.driver.get(pageUrl);
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+//        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Course page not loaded");
+        Assertions.assertTrue(this.isInitialized());
+    }
 
     //! linkText?
     @FindBy(linkText = "Students")
@@ -63,26 +92,6 @@ public class CoursePage extends PageObject {
     @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
     @CacheLookup
     private WebElement save;
-
-    public CoursePage() {
-        super();
-    }
-
-    public CoursePage(WebDriver driver) {
-        super(driver);
-    }
-
-    public CoursePage(WebDriver driver, Map<String, String> data) {
-        super(driver, data);
-    }
-
-    public CoursePage(WebDriver driver, Map<String, String> data, int timeout) {
-        super(driver, data, timeout);
-    }
-
-    public boolean isInitialized() {
-        return courses.isDisplayed();
-    }
 
     /**
      * Click on Add Button
@@ -259,32 +268,32 @@ public class CoursePage extends PageObject {
         return this;
     }
 
-    /**
-     * Verify that the page loaded completely.
-     *
-     * @return the CoursePage class instance.
-     */
-    public CoursePage verifyPageLoaded() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getPageSource().contains(pageLoadedText);
-            }
-        });
-        return this;
-    }
-
-    /**
-     * Verify that current page URL matches the expected URL.
-     *
-     * @return the CoursePage class instance.
-     */
-    public CoursePage verifyPageUrl() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().contains(pageUrl);
-            }
-        });
-        return this;
-    }
+//    /**
+//     * Verify that the page loaded completely.
+//     *
+//     * @return the CoursePage class instance.
+//     */
+//    public CoursePage verifyPageLoaded() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getPageSource().contains(pageLoadedText);
+//            }
+//        });
+//        return this;
+//    }
+//
+//    /**
+//     * Verify that current page URL matches the expected URL.
+//     *
+//     * @return the CoursePage class instance.
+//     */
+//    public CoursePage verifyPageUrl() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getCurrentUrl().contains(pageUrl);
+//            }
+//        });
+//        return this;
+//    }
 
 }

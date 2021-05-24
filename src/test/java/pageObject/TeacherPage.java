@@ -1,23 +1,52 @@
 package pageObject;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Map;
 
-public class TeacherPage extends PageObject {
+public class TeacherPage extends PageObject<TeacherPage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = "/teacher";
+    private final String pageUrl = getBaseUrl() + "/teacher";
     private Map<String, String> data;
     private WebDriver driver;
     private int timeout = 15;
-
     //! map values to data
+
+    public TeacherPage(WebDriver driver) {
+        super(driver);
+    }
+
+//    public TeacherPage() {
+//        super();
+//    }
+//
+//    public TeacherPage(WebDriver driver, Map<String, String> data) {
+//        super(driver, data);
+//    }
+//
+//    public TeacherPage(WebDriver driver, Map<String, String> data, int timeout) {
+//        super(driver, data, timeout);
+//    }
+//
+    public boolean isInitialized() {
+        return teachers.isDisplayed();
+    }
+
+    @Override
+    protected void load() {
+        this.driver.get(pageUrl);
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+//        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Teacher page not loaded");
+        Assertions.assertTrue(this.isInitialized());
+    }
 
     @FindBy(linkText = "Students")
     @CacheLookup
@@ -69,26 +98,6 @@ public class TeacherPage extends PageObject {
     @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-text")
     @CacheLookup
     private WebElement toggleCourses;
-
-    public TeacherPage() {
-        super();
-    }
-
-    public TeacherPage(WebDriver driver) {
-        super(driver);
-    }
-
-    public TeacherPage(WebDriver driver, Map<String, String> data) {
-        super(driver, data);
-    }
-
-    public TeacherPage(WebDriver driver, Map<String, String> data, int timeout) {
-        super(driver, data, timeout);
-    }
-
-    public boolean isInitialized() {
-        return teachers.isDisplayed();
-    }
 
     /**
      * Click on Add Button
@@ -275,32 +284,32 @@ public class TeacherPage extends PageObject {
         return this;
     }
 
-    /**
-     * Verify that the page loaded completely.
-     *
-     * @return the TeacherPage class instance.
-     */
-    public TeacherPage verifyPageLoaded() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getPageSource().contains(pageLoadedText);
-            }
-        });
-        return this;
-    }
-
-    /**
-     * Verify that current page URL matches the expected URL.
-     *
-     * @return the TeacherPage class instance.
-     */
-    public TeacherPage verifyPageUrl() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().contains(pageUrl);
-            }
-        });
-        return this;
-    }
+//    /**
+//     * Verify that the page loaded completely.
+//     *
+//     * @return the TeacherPage class instance.
+//     */
+//    public TeacherPage verifyPageLoaded() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getPageSource().contains(pageLoadedText);
+//            }
+//        });
+//        return this;
+//    }
+//
+//    /**
+//     * Verify that current page URL matches the expected URL.
+//     *
+//     * @return the TeacherPage class instance.
+//     */
+//    public TeacherPage verifyPageUrl() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getCurrentUrl().contains(pageUrl);
+//            }
+//        });
+//        return this;
+//    }
 
 }

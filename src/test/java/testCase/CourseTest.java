@@ -12,7 +12,7 @@ public class CourseTest extends FunctionalTest {
     public void setupEachCourseTest() {
         driver.get("http://localhost:3000/course");
         page = new CoursePage(driver);
-        Assertions.assertTrue(page.isInitialized());
+        page.get();
     }
 
     @Test
