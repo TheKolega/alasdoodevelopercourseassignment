@@ -1,20 +1,19 @@
 package pageObject;
 
-import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
+import utils.PageUtils;
 
 import java.util.Map;
 
 public class CoursePage extends PageObject<CoursePage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = getBaseUrl() + "/course";
+    private final String pageUrl = "http://localhost:3000/course";
     private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
     //! map values to data : course name, class per week, cost per class
 
     public CoursePage(WebDriver driver) {
@@ -32,10 +31,6 @@ public class CoursePage extends PageObject<CoursePage> {
 //    public CoursePage(WebDriver driver, Map<String, String> data, int timeout) {
 //        super(driver, data, timeout);
 //    }
-//
-    public boolean isInitialized() {
-        return courses.isDisplayed();
-    }
 
     @Override
     protected void load() {
@@ -45,10 +40,12 @@ public class CoursePage extends PageObject<CoursePage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Course page not loaded");
-        Assertions.assertTrue(this.isInitialized());
+
+        PageUtils.isLoaded().
+                waitForElementIsVisible(driver, courses).
+                waitForElementIsClickable(driver, courses);
     }
 
-    //! linkText?
     @FindBy(linkText = "Students")
     @CacheLookup
     private WebElement students;
@@ -65,9 +62,17 @@ public class CoursePage extends PageObject<CoursePage> {
     @CacheLookup
     private WebElement settings;
 
-    @FindBy(css = ".MuiFab-root")
+    @FindBy(xpath = "//button[@aria-label='add']")
     @CacheLookup
     private WebElement addButton;
+
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Next page']")
+    @CacheLookup
+    private WebElement nextPage;
+
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Previous page']")
+    @CacheLookup
+    private WebElement previousPage;
 
     @FindBy(css = ".MuiDataGrid-row:nth-child(1) > .MuiDataGrid-cell:nth-child(1)")
     @CacheLookup
@@ -100,6 +105,26 @@ public class CoursePage extends PageObject<CoursePage> {
      */
     public CoursePage clickAddButton() {
         addButton.click();
+        return this;
+    }
+
+    /**
+     * Click on Next Page Button
+     *
+     * @return the CoursePage class instance.
+     */
+    public CoursePage clickNextPageButton() {
+        nextPage.click();
+        return this;
+    }
+
+    /**
+     * Click on Previous Page Button
+     *
+     * @return the StudentPage class instance.
+     */
+    public CoursePage clickPreviousPageButton() {
+        previousPage.click();
         return this;
     }
 
@@ -216,6 +241,7 @@ public class CoursePage extends PageObject<CoursePage> {
      * @return the CoursePage class instance.
      */
     public CoursePage setClassPerWeekNumberField(String classPerWeekValue) {
+        classesPerWeek.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         classesPerWeek.sendKeys(classPerWeekValue);
         return this;
     }
@@ -235,6 +261,7 @@ public class CoursePage extends PageObject<CoursePage> {
      * @return the CoursePage class instance.
      */
     public CoursePage setCostPerClassNumberField(String costPerClassValue) {
+        costPerClass.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         costPerClass.sendKeys(costPerClassValue);
         return this;
     }
@@ -254,6 +281,7 @@ public class CoursePage extends PageObject<CoursePage> {
      * @return the CoursePage class instance.
      */
     public CoursePage setCourseNameTextField(String courseNameValue) {
+        developerCourseName.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         developerCourseName.sendKeys(courseNameValue);
         return this;
     }

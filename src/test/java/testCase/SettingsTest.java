@@ -1,6 +1,9 @@
 package testCase;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import pageObject.SettingsPage;
 import pageObject.StudentPage;
 
@@ -18,7 +21,12 @@ public class SettingsTest extends FunctionalTest {
     }
 
     @Test
-    public void testSettings() {
-        page.clickSettingsLink();//! needed?
+    @Order(10)
+    public void testSettingsTextExists() {
+        System.out.println("SettingsTest1TextExists");
+
+        String expectedText = "Inject demo content in the backend. Run this command only once!";
+        String actualText = driver.findElement(By.cssSelector("p.MuiTypography-root")).getText();
+        MatcherAssert.assertThat(actualText, Matchers.containsStringIgnoringCase(expectedText));
     }
 }

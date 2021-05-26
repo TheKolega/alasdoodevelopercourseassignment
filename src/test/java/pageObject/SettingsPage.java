@@ -1,11 +1,11 @@
 package pageObject;
 
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.LoadableComponent;
+import utils.PageUtils;
 
 import java.util.Map;
 
@@ -13,11 +13,8 @@ public class SettingsPage extends PageObject<SettingsPage> {
 
     private final LoadableComponent<?> parent;
     private final String pageLoadedText = "";
-    private final String pageUrl = getBaseUrl() + "/settings";
+    private final String pageUrl = "http://localhost:3000/settings";
     private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
-
 
     public SettingsPage(WebDriver driver, LoadableComponent<?> parent) {
         super(driver);
@@ -35,10 +32,6 @@ public class SettingsPage extends PageObject<SettingsPage> {
 //    public SettingsPage(WebDriver driver, Map<String, String> data, int timeout) {
 //        super(driver, data, timeout);
 //    }
-//
-    public boolean isInitialized() {
-        return settings.isDisplayed();
-    }
 
     @Override
     protected void load() {
@@ -49,7 +42,9 @@ public class SettingsPage extends PageObject<SettingsPage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Settings page not loaded");
-        Assertions.assertTrue(this.isInitialized());
+        PageUtils.isLoaded().
+                waitForElementIsVisible(driver, settings).
+                waitForElementIsClickable(driver, settings);
     }
 
     @FindBy(linkText = "Students")

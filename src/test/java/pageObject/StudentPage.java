@@ -1,20 +1,19 @@
 package pageObject;
 
-import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
+import utils.PageUtils;
 
 import java.util.Map;
 
 public class StudentPage extends PageObject<StudentPage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = getBaseUrl() + "/student";
+    private final String pageUrl = "http://localhost:3000/student";
     private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
     //! map values to data
 
     public StudentPage(WebDriver driver) {
@@ -32,10 +31,6 @@ public class StudentPage extends PageObject<StudentPage> {
 //    public StudentPage(WebDriver driver, Map<String, String> data, int timeout) {
 //        super(driver, data, timeout);
 //    }
-//
-    public boolean isInitialized() {
-        return students.isDisplayed();
-    }
 
     @Override
     protected void load() {
@@ -45,9 +40,11 @@ public class StudentPage extends PageObject<StudentPage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains("student"), "Student page not loaded");
-        Assertions.assertTrue(this.isInitialized());
-    }
 
+        PageUtils.isLoaded().
+                waitForElementIsVisible(driver, students).
+                waitForElementIsClickable(driver, students);
+    }
 
     @FindBy(linkText = "Students")
     @CacheLookup
@@ -209,6 +206,16 @@ public class StudentPage extends PageObject<StudentPage> {
     }
 
     /**
+     *
+     */
+    public StudentPage clearElement(WebElement element) {
+        //! Clear method isn't a proper user input
+        //! Clear method doesn't work on Chrome with React Text
+        element.clear();
+        return this;
+    }
+
+    /**
      * Set default value to Name Text field.
      *
      * @return the StudentPage class instance.
@@ -223,6 +230,7 @@ public class StudentPage extends PageObject<StudentPage> {
      * @return the StudentPage class instance.
      */
     public StudentPage setNameTextField(String nameValue) {
+        name.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         name.sendKeys(nameValue);
         return this;
     }
@@ -242,6 +250,7 @@ public class StudentPage extends PageObject<StudentPage> {
      * @return the StudentPage class instance.
      */
     public StudentPage setSurnameTextField(String surnameValue) {
+        surname.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         surname.sendKeys(surnameValue);
         return this;
     }
@@ -261,6 +270,7 @@ public class StudentPage extends PageObject<StudentPage> {
      * @return the StudentPage class instance.
      */
     public StudentPage setAccountNameTextField(String accountNameValue) {
+        accountName.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         accountName.sendKeys(accountNameValue);
         return this;
     }
@@ -280,6 +290,7 @@ public class StudentPage extends PageObject<StudentPage> {
      * @return the StudentPage class instance.
      */
     public StudentPage setEmailEmailField(String emailValue) {
+        email.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         email.sendKeys(emailValue);
         return this;
     }
@@ -299,6 +310,7 @@ public class StudentPage extends PageObject<StudentPage> {
      * @return the StudentPage class instance.
      */
     public StudentPage setBankCardNumberTextField(String bankCardNumberValue) {
+        bankCardNumber.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         bankCardNumber.sendKeys(bankCardNumberValue);
         return this;
     }

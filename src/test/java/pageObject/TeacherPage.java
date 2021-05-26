@@ -1,20 +1,19 @@
 package pageObject;
 
-import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
+import utils.PageUtils;
 
 import java.util.Map;
 
 public class TeacherPage extends PageObject<TeacherPage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = getBaseUrl() + "/teacher";
+    private final String pageUrl = "http://localhost:3000/teacher";
     private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
     //! map values to data
 
     public TeacherPage(WebDriver driver) {
@@ -32,10 +31,6 @@ public class TeacherPage extends PageObject<TeacherPage> {
 //    public TeacherPage(WebDriver driver, Map<String, String> data, int timeout) {
 //        super(driver, data, timeout);
 //    }
-//
-    public boolean isInitialized() {
-        return teachers.isDisplayed();
-    }
 
     @Override
     protected void load() {
@@ -45,7 +40,10 @@ public class TeacherPage extends PageObject<TeacherPage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Teacher page not loaded");
-        Assertions.assertTrue(this.isInitialized());
+
+        PageUtils.isLoaded().
+                waitForElementIsVisible(driver, teachers).
+                waitForElementIsClickable(driver, teachers);
     }
 
     @FindBy(linkText = "Students")
@@ -64,18 +62,21 @@ public class TeacherPage extends PageObject<TeacherPage> {
     @CacheLookup
     private WebElement settings;
 
-    @FindBy(css = ".MuiFab-root")
+    @FindBy(xpath = "//button[@aria-label='add']")
     @CacheLookup
     private WebElement addButton;
+
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Next page']")
+    @CacheLookup
+    private WebElement nextPage;
+
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Previous page']")
+    @CacheLookup
+    private WebElement previousPage;
 
     @FindBy(css = ".MuiDataGrid-row:nth-child(1) > .MuiDataGrid-cell:nth-child(1)")
     @CacheLookup
     private WebElement entryFirst;
-
-
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary")
-    @CacheLookup
-    private WebElement delete;
 
     @FindBy(name = "teacherEmail")
     @CacheLookup
@@ -85,19 +86,21 @@ public class TeacherPage extends PageObject<TeacherPage> {
     @CacheLookup
     private WebElement name;
 
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
-    @CacheLookup
-    private WebElement save;
-
-
     @FindBy(name = "teacherSurname")
     @CacheLookup
     private WebElement surname;
 
-
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-text")
+    @FindBy(xpath = "//button[@data-test-id='courses']")
     @CacheLookup
     private WebElement toggleCourses;
+
+    @FindBy(xpath = "//button[@data-test-id='save']")
+    @CacheLookup
+    private WebElement save;
+
+    @FindBy(xpath = "//button[@data-test-id='delete']")
+    @CacheLookup
+    private WebElement delete;
 
     /**
      * Click on Add Button
@@ -106,6 +109,26 @@ public class TeacherPage extends PageObject<TeacherPage> {
      */
     public TeacherPage clickAddButton() {
         addButton.click();
+        return this;
+    }
+
+    /**
+     * Click on Next Page Button
+     *
+     * @return the TeacherPage class instance.
+     */
+    public TeacherPage clickNextPageButton() {
+        nextPage.click();
+        return this;
+    }
+
+    /**
+     * Click on Previous Page Button
+     *
+     * @return the StudentPage class instance.
+     */
+    public TeacherPage clickPreviousPageButton() {
+        previousPage.click();
         return this;
     }
 
@@ -232,6 +255,7 @@ public class TeacherPage extends PageObject<TeacherPage> {
      * @return the TeacherPage class instance.
      */
     public TeacherPage setEmailEmailField(String emailValue) {
+        email.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         email.sendKeys(emailValue);
         return this;
     }
@@ -251,6 +275,7 @@ public class TeacherPage extends PageObject<TeacherPage> {
      * @return the TeacherPage class instance.
      */
     public TeacherPage setNameTextField(String nameValue) {
+        name.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         name.sendKeys(nameValue);
         return this;
     }
@@ -270,6 +295,7 @@ public class TeacherPage extends PageObject<TeacherPage> {
      * @return the TeacherPage class instance.
      */
     public TeacherPage setSurnameTextField(String surnameValue) {
+        surname.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         surname.sendKeys(surnameValue);
         return this;
     }
