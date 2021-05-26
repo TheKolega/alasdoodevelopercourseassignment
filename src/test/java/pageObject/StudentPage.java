@@ -1,29 +1,50 @@
 package pageObject;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.PageUtils;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
-
-public class StudentPage extends PageObject {
+public class StudentPage extends PageObject<StudentPage> {
 
     private final String pageLoadedText = "";
-    private final String pageUrl = "http://localhost:3000/student"; //! full url?
+    private final String pageUrl = "http://localhost:3000/student";
     private Map<String, String> data;
-    private WebDriver driver;
-    private int timeout = 15;
+    //! map values to data
 
-    public String getPageUrl() {
-        return pageUrl;
+    public StudentPage(WebDriver driver) {
+        super(driver);
     }
 
-    //! map values to data
+//    public StudentPage() {
+//        super();
+//    }
+//
+//    public StudentPage(WebDriver driver, Map<String, String> data) {
+//        super(driver, data);
+//    }
+//
+//    public StudentPage(WebDriver driver, Map<String, String> data, int timeout) {
+//        super(driver, data, timeout);
+//    }
+
+    @Override
+    protected void load() {
+        this.driver.get(pageUrl);
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+//        Assertions.assertTrue(driver.getCurrentUrl().contains("student"), "Student page not loaded");
+
+        PageUtils.isLoaded().
+                waitForElementIsVisible(driver, students).
+                waitForElementIsClickable(driver, students);
+    }
 
     @FindBy(linkText = "Students")
     @CacheLookup
@@ -41,13 +62,21 @@ public class StudentPage extends PageObject {
     @CacheLookup
     private WebElement settings;
 
-    @FindBy(css = ".MuiFab-root")
+    @FindBy(xpath = "//button[@aria-label='add']")
     @CacheLookup
     private WebElement addButton;
 
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Next page']")
+    @CacheLookup
+    private WebElement nextPage;
+
+    @FindBy(xpath = "//div[@class='MuiTablePagination-actions']//button[@title='Previous page']")
+    @CacheLookup
+    private WebElement previousPage;
+
     @FindBy(css = ".MuiDataGrid-row:nth-child(1) > .MuiDataGrid-cell:nth-child(1)")
     @CacheLookup
-    private WebElement entryFirst;
+    private WebElement firstEntryValue;
 
     @FindBy(name = "name")
     @CacheLookup
@@ -69,90 +98,32 @@ public class StudentPage extends PageObject {
     @CacheLookup
     private WebElement bankCardNumber;
 
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-text")
-//    @FindBy(linkText = "Courses")
+    @FindBy(xpath = "//button[@data-test-id='courses']")
     @CacheLookup
     private WebElement toggleCourses;
 
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
-//    @FindBy(linkText = "Save")
+    @FindBy(xpath = "//button[@data-test-id='save']")
     @CacheLookup
     private WebElement save;
 
-    @FindBy(css = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary")
-//    @FindBy(linkText = "Delete")
+    @FindBy(xpath = "//button[@data-test-id='delete']")
     @CacheLookup
     private WebElement delete;
 
 
-    public StudentPage(WebDriver driver) {
-        super(driver);
-        assertTrue(students.isDisplayed());
-    }
+    /*
 
-    public boolean isInitialized() {
-        return students.isDisplayed();
-    }
+    //!
+    @FindBy(nesto)
+    @CacheLookup
+    private WebElement entryValue;
 
-    /**
-     * Click on Add Button
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage clickAddButton() {
-        addButton.click();
+    public StudentPage findEntry(String entry){
+
         return this;
     }
 
-    /**
-     * Click on the first entry in the table.
-     *
-     * @return the StudentPage class instance.
      */
-    public StudentPage clickEntryFirst() {
-        entryFirst.click();
-        return this;
-    }
-
-    /**
-     * Click on Courses Link.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage clickCoursesLink() {
-        courses.click();
-        return this;
-    }
-
-    /**
-     * Click on Delete Button.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage clickDeleteButton() {
-        delete.click();
-        return this;
-    }
-
-    /**
-     * Click on Save Button.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage clickSaveButton() {
-        save.click();
-        return this;
-    }
-
-    /**
-     * Click on Settings Link.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage clickSettingsLink() {
-        settings.click();
-        return this;
-    }
 
     /**
      * Click on Students Link.
@@ -175,12 +146,202 @@ public class StudentPage extends PageObject {
     }
 
     /**
+     * Click on Courses Link.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickCoursesLink() {
+        courses.click();
+        return this;
+    }
+
+    /**
+     * Click on Settings Link.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickSettingsLink() {
+        settings.click();
+        return this;
+    }
+
+    /**
+     * Click on Add Button
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickAddButton() {
+        addButton.click();
+        return this;
+    }
+
+    /**
+     * Click on Next Page Button
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickNextPageButton() {
+        nextPage.click();
+        return this;
+    }
+
+    /**
+     * Click on Previous Page Button
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickPreviousPageButton() {
+        previousPage.click();
+        return this;
+    }
+
+    /**
+     * Click on the first entry in the table.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickEntryFirst() {
+        firstEntryValue.click();
+        return this;
+    }
+
+    /**
+     *
+     */
+    public StudentPage clearElement(WebElement element) {
+        //! Clear method isn't a proper user input
+        //! Clear method doesn't work on Chrome with React Text
+        element.clear();
+        return this;
+    }
+
+    /**
+     * Set default value to Name Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setNameTextField() {
+        return setNameTextField(data.get("NAME"));
+    }
+
+    /**
+     * Set value to Name Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setNameTextField(String nameValue) {
+        name.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        name.sendKeys(nameValue);
+        return this;
+    }
+
+    /**
+     * Set default value to Surname Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setSurnameTextField() {
+        return setSurnameTextField(data.get("SURNAME"));
+    }
+
+    /**
+     * Set value to Surname Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setSurnameTextField(String surnameValue) {
+        surname.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        surname.sendKeys(surnameValue);
+        return this;
+    }
+
+    /**
+     * Set default value to Account Name Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setAccountNameTextField() {
+        return setAccountNameTextField(data.get("ACCOUNT_NAME"));
+    }
+
+    /**
+     * Set value to Account Name Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setAccountNameTextField(String accountNameValue) {
+        accountName.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        accountName.sendKeys(accountNameValue);
+        return this;
+    }
+
+    /**
+     * Set default value to Email Email field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setEmailEmailField() {
+        return setEmailEmailField(data.get("EMAIL"));
+    }
+
+    /**
+     * Set value to Email Email field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setEmailEmailField(String emailValue) {
+        email.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        email.sendKeys(emailValue);
+        return this;
+    }
+
+    /**
+     * Set default value to Bank Card Number Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setBankCardNumberTextField() {
+        return setBankCardNumberTextField(data.get("BANK_CARD_NUMBER"));
+    }
+
+    /**
+     * Set value to Bank Card Number Text field.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage setBankCardNumberTextField(String bankCardNumberValue) {
+        bankCardNumber.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        bankCardNumber.sendKeys(bankCardNumberValue);
+        return this;
+    }
+
+    /**
      * Click on Toggle Courses Button.
      *
      * @return the StudentPage class instance.
      */
     public StudentPage clickToggleCoursesButton() {
         toggleCourses.click();
+        return this;
+    }
+
+    /**
+     * Click on Save Button.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickSaveButton() {
+        save.click();
+        return this;
+    }
+
+    /**
+     * Click on Delete Button.
+     *
+     * @return the StudentPage class instance.
+     */
+    public StudentPage clickDeleteButton() {
+        delete.click();
         return this;
     }
 
@@ -207,111 +368,6 @@ public class StudentPage extends PageObject {
 //    }
 
     /**
-     * Fill every fields in the page and submit it to target page.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage fillAndSubmit() {
-        fill();
-        return submit();
-    }
-
-    /**
-     * Set default value to Account Name Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setAccountNameTextField() {
-        return setAccountNameTextField(data.get("ACCOUNT_NAME"));
-    }
-
-    /**
-     * Set value to Account Name Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setAccountNameTextField(String accountNameValue) {
-        accountName.sendKeys(accountNameValue);
-        return this;
-    }
-
-    /**
-     * Set default value to Bank Card Number Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setBankCardNumberTextField() {
-        return setBankCardNumberTextField(data.get("BANK_CARD_NUMBER"));
-    }
-
-    /**
-     * Set value to Bank Card Number Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setBankCardNumberTextField(String bankCardNumberValue) {
-        bankCardNumber.sendKeys(bankCardNumberValue);
-        return this;
-    }
-
-    /**
-     * Set default value to Email Email field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setEmailEmailField() {
-        return setEmailEmailField(data.get("EMAIL"));
-    }
-
-    /**
-     * Set value to Email Email field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setEmailEmailField(String emailValue) {
-        email.sendKeys(emailValue);
-        return this;
-    }
-
-    /**
-     * Set default value to Name Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setNameTextField() {
-        return setNameTextField(data.get("NAME"));
-    }
-
-    /**
-     * Set value to Name Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setNameTextField(String nameValue) {
-        name.sendKeys(nameValue);
-        return this;
-    }
-
-    /**
-     * Set default value to Surname Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setSurnameTextField() {
-        return setSurnameTextField(data.get("SURNAME"));
-    }
-
-    /**
-     * Set value to Surname Text field.
-     *
-     * @return the StudentPage class instance.
-     */
-    public StudentPage setSurnameTextField(String surnameValue) {
-        surname.sendKeys(surnameValue);
-        return this;
-    }
-
-    /**
      * Submit the form to target page.
      *
      * @return the StudentPage class instance.
@@ -322,31 +378,52 @@ public class StudentPage extends PageObject {
     }
 
     /**
-     * Verify that the page loaded completely.
+     * Fill every fields in the page and submit it to target page.
      *
      * @return the StudentPage class instance.
      */
-    public StudentPage verifyPageLoaded() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getPageSource().contains(pageLoadedText);
-            }
-        });
-        return this;
+    public StudentPage fillAndSubmit() {
+        fill();
+        return submit();
     }
 
+
     /**
-     * Verify that current page URL matches the expected URL.
+     * Go from the Students page to the Settings page
      *
-     * @return the StudentPage class instance.
+     * @return the SettingsPage class instance.
      */
-    public StudentPage verifyPageUrl() {
-        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().contains(pageUrl);
-            }
-        });
-        return this;
+    public SettingsPage goToSettingsPage() {
+        clickSettingsLink();
+        return new SettingsPage(this.driver, this);
     }
+
+//    /**
+//     * Verify that the page loaded completely.
+//     *
+//     * @return the StudentPage class instance.
+//     */
+//    public StudentPage verifyPageLoaded() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getPageSource().contains(pageLoadedText);
+//            }
+//        });
+//        return this;
+//    }
+//
+//    /**
+//     * Verify that current page URL matches the expected URL.
+//     *
+//     * @return the StudentPage class instance.
+//     */
+//    public StudentPage verifyPageUrl() {
+//        (new WebDriverWait(driver, timeout)).until(new ExpectedCondition<Boolean>() {
+//            public Boolean apply(WebDriver d) {
+//                return d.getCurrentUrl().contains(pageUrl);
+//            }
+//        });
+//        return this;
+//    }
 
 }

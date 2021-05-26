@@ -1,18 +1,21 @@
 package testCase;
 
-import com.microsoft.edge.seleniumtools.EdgeDriver;
-import com.microsoft.edge.seleniumtools.EdgeOptions;
+import io.github.bonigarcia.seljup.SeleniumJupiter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.WebElement;
+import pageObject.PageObject;
+import utils.BrowsersEnum;
+import utils.ConstEnum;
 
-import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * <strong>testCase.FunctionalTest</strong> handles setup and teardown of WebDriver.
@@ -21,84 +24,67 @@ import java.util.concurrent.TimeUnit;
  */
 public class FunctionalTest {
 
-    protected static WebDriver driver;
+    protected WebDriver driver;
+    public static BrowsersEnum BROWSER = BrowsersEnum.EDGE;
 
-    final String firefox = "firefox";
-    private static final Path pathFirefox = Path.of("src/test/resources/webdrivers_linux/geckodriver");
-
-    final String chrome = "chrome";
-    private static final Path pathChrome = Path.of("src/test/resources/webdrivers_linux/chromedriver");
-
-    final String opera = "opera";
-    private static final Path pathOpera = Path.of("src/test/resources/webdrivers_linux/operadriver");
-
-    final String edge = "edge";
-    private static final Path pathEdge = Path.of("src/test/resources/webdrivers_linux/msedgedriver");
-
-    //static Path path = FileSystems.getDefault().getPath("webdrivers_linux/geckodriver");
-
-/* FIND FILE
-
-    static {
-        System.setProperty("webdriver.gecko.driver", findFile("geckodriver.exe"));
-    }
-
-    static private String findFile(String filename) {
-        String[] paths = {"", "bin/", "target/classes"};
-        for (String path : paths) {
-            if (new File(path + filename).exists())
-                return path + filename;
-        }
-        return "";
-    }
-*/
+    @RegisterExtension
+    static SeleniumJupiter seleniumJupiter = new SeleniumJupiter();
 
     @BeforeAll
     public static void setupAll() {
         System.out.println("BeforeAll");
 
-        System.setProperty("webdriver.gecko.driver", pathFirefox.toString());
+//        System.setProperty("browserFamily", "phantomjs"); //! Maven command input
 
-        System.setProperty("webdriver.chrome.driver", pathChrome.toString());
-
-        System.setProperty("webdriver.opera.driver", pathOpera.toString());
-
-        System.setProperty("webdriver.edge.driver", pathEdge.toString());
+        BROWSER = getBrowserTypeProperty(System.getProperty("browserFamily"));
+        seleniumJupiter.getConfig().setDefaultBrowser(BROWSER.getStringValue());
     }
 
     @BeforeEach
-    public void setupEach() {
+    public void setupEach(WebDriver driver) {
         System.out.println("BeforeEach");
-        switch (System.getProperty("browserFamily")) {
-            case firefox: {
-                driver = new FirefoxDriver();
-                break;
-            }
-            case chrome: {
-                driver = new ChromeDriver();
-                break;
-            }
-            case opera: {
+
+        this.driver = driver;
+        driver.manage().deleteAllCookies();
+        driver.manage().timeouts().pageLoadTimeout(ConstEnum.LOAD_TIMEOUT.getValue(), TimeUnit.SECONDS);
+//        driver.manage().window().maximize();
+
+
+/*        WebDriverManager browser selection - deprecated
+//
+//        switch (System.getProperty("browserFamily")) {
+//            case firefox: {
+//                WebDriverManager.firefoxdriver().setup();
+//                driver = new FirefoxDriver();
+//                break;
+//            }
+//            case chrome: {
+//                WebDriverManager.chromedriver().setup();
+//                driver = new ChromeDriver();
+//                break;
+//            }
+//            case opera: {
 //                OperaOptions options = new OperaOptions();
 //                options.addArguments("--no-sandbox");
-                driver = new OperaDriver();
-                break;
-            }
-            case edge: {
-                EdgeOptions options = new EdgeOptions();
-                options.addArguments("--no-sandbox");
-                driver = new EdgeDriver();
-                break;
-            }
-            default: {
-                driver = new FirefoxDriver();
-            }
-        }
-
-        driver.manage().deleteAllCookies();
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        driver.manage().window().maximize();
+//                WebDriverManager.operadriver().setup();
+//                driver = new OperaDriver(options);
+//                break;
+//            }
+//            case edge: {
+//                EdgeOptions options = new EdgeOptions();
+//                options.addArguments("--no-sandbox");
+//                WebDriverManager.edgedriver().setup();
+//                driver = new EdgeDriver(options);
+//                break;
+//            }
+//            default: {
+//                System.setProperty("browserFamily", firefox);
+//                WebDriverManager.firefoxdriver().setup();
+//                driver = new FirefoxDriver();
+//                break;
+//            }
+//        }
+ */
     }
 
     @AfterEach
@@ -110,6 +96,44 @@ public class FunctionalTest {
     @AfterAll
     public static void TearDownAll() {
         System.out.println("AfterAll");
+    }
+
+    private static BrowsersEnum getBrowserTypeProperty(String browserProperty)
+            throws IllegalArgumentException {
+        if (browserProperty == null || browserProperty.isEmpty()) {
+//            logger.info("Browser was null. Setting chrome as browser.");
+            return BrowsersEnum.CHROME;
+        }
+        BrowsersEnum browser = BrowsersEnum.valueOf(browserProperty.toUpperCase());
+//        logger.info("Browser identified: {},", browser);
+        return browser;
+    }
+
+    public WebElement seekTillLastPage(PageObject<?> page, String expectedValue) {
+        boolean lastPage = false;
+        WebElement foundElement = null;
+        WebElement nextPageButton = null;
+        // Because the add button covers the next page, click it to move it
+        driver.findElement(By.xpath("//button[@aria-label='add']")).click();
+        while (!lastPage) {
+            nextPageButton = driver.findElement(By.xpath("//div[@class='MuiTablePagination-actions']//button[@title='Next page']"));
+            if (nextPageButton.getAttribute("tabindex").equals("-1")) {
+                // by tabindex="-1" or by disabled=""
+                lastPage = true;
+            }
+            //find element with expectedValue on current page
+            try {
+                return foundElement = driver.findElement(By.xpath("//div[@data-value='" + expectedValue + "']"));
+            } catch (NoSuchElementException ex) {
+                if (lastPage) {
+                    break;
+                } else {
+                    driver.findElement(By.xpath("//button[@aria-label='add']")).click();
+                    nextPageButton.click();
+                }
+            }
+        }
+        return foundElement;
     }
 
 }

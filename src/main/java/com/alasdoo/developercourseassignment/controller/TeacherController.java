@@ -14,7 +14,7 @@ import java.util.List;
 public class TeacherController {
 
     @Autowired
-    TeacherServiceImpl teacherServiceImpl;
+    private TeacherServiceImpl teacherServiceImpl;
 
     @GetMapping(value = "/getTeacher/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public TeacherDTO selectTeacher(@PathVariable("id") Integer id) {
@@ -29,6 +29,16 @@ public class TeacherController {
     @PostMapping(value = "/addTeacher", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TeacherDTO saveTeacher(@RequestBody TeacherDTO teacherDTO) {
         return teacherServiceImpl.save(teacherDTO);
+    }
+
+    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public TeacherDTO updateTeacher(@PathVariable("id") Integer id, @RequestBody TeacherDTO teacherDTO) {
+        return teacherServiceImpl.update(id, teacherDTO);
+    }
+
+    @DeleteMapping(value = "/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteStudent(@PathVariable("id") Integer id) {
+        teacherServiceImpl.remove(id);
     }
 
     @GetMapping(value = "/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
