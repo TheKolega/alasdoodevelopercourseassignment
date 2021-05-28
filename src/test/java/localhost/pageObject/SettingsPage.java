@@ -42,9 +42,7 @@ public class SettingsPage extends PageObject<SettingsPage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Settings page not loaded");
-        PageUtils.isLoaded().
-                waitForElementIsVisible(driver, settings).
-                waitForElementIsClickable(driver, settings);
+        PageUtils.isLoaded(driver, settings);
     }
 
     @FindBy(linkText = "Students")

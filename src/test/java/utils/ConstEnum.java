@@ -7,7 +7,8 @@ import java.util.Map;
 public enum ConstEnum {
     LOAD_TIMEOUT(30),
     BASIC_WAIT_TIME_IN_SECONDS(60),
-    REFRESH_RATE(2);
+    REFRESH_RATE(2),
+    TEST_ACTION_PAUSE(500);
 
     private int value;
     private static Map<Integer, ConstEnum> map = new HashMap<>();

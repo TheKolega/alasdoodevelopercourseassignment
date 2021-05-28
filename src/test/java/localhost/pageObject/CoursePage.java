@@ -40,10 +40,7 @@ public class CoursePage extends PageObject<CoursePage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Course page not loaded");
-
-        PageUtils.isLoaded().
-                waitForElementIsVisible(driver, courses).
-                waitForElementIsClickable(driver, courses);
+        PageUtils.isLoaded(driver, courses);
     }
 
     @FindBy(linkText = "Students")

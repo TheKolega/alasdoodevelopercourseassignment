@@ -117,6 +117,7 @@
                         <!--                        <argLine>-DbrowserFamily=firefox</argLine>-->
                         <excludes>
                             <exclude>FunctionalTest.java</exclude>
+                            <exclude>TestBase.java</exclude>
                         </excludes>
                         <systemPropertyVariables>
 <!--                            <osFamily>linux</osFamily>-->

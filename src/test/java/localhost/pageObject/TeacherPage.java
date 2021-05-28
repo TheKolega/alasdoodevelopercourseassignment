@@ -40,10 +40,7 @@ public class TeacherPage extends PageObject<TeacherPage> {
     @Override
     protected void isLoaded() throws Error {
 //        Assertions.assertTrue(driver.getCurrentUrl().contains(pageUrl), "Teacher page not loaded");
-
-        PageUtils.isLoaded().
-                waitForElementIsVisible(driver, teachers).
-                waitForElementIsClickable(driver, teachers);
+        PageUtils.isLoaded(driver, teachers);
     }
 
     @FindBy(linkText = "Students")
