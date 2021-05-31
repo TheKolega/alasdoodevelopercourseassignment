@@ -3,22 +3,26 @@ pipeline {
     stages {
         stage('Chrome Tests') {
             steps {
-                sh 'mvn test -DbrowserFamily=chrome'
+                sh 'echo "Chrome tests run here"'
+//                 sh 'mvn test -DbrowserFamily=chrome'
             }
         }
         stage('Firefox Tests') {
             steps {
-                sh 'mvn test -DbrowserFamily=firefox'
+                sh 'echo "Firefox tests run here"'
+//                 sh 'mvn test -DbrowserFamily=firefox'
             }
         }
         stage('Opera Tests') {
             steps {
-                sh 'mvn test -DbrowserFamily=opera'
+                sh 'echo "Opera tests run here"'
+//                 sh 'mvn test -DbrowserFamily=opera'
             }
         }
         stage('Edge Tests') {
             steps {
-                sh 'mvn test -DbrowserFamily=edge'
+                sh 'echo "Edge tests run here"'
+//                 sh 'mvn test -DbrowserFamily=edge'
             }
         }
         stage('build') {
