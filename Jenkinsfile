@@ -55,7 +55,7 @@ pipeline {
     post {
         always {
             echo 'This will always run'
-            archiveArtifacts 'target/**/*.jar'
+            archiveArtifacts '**/*.jar'
             junit 'target/**/*.xml'
         }
         success {
