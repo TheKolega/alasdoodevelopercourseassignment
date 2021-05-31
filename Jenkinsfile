@@ -56,7 +56,7 @@ pipeline {
         always {
             echo 'This will always run'
             archiveArtifacts '**/*.jar'
-            junit 'surefire-reports/*.xml'
+//             junit 'surefire-reports/*.xml'
         }
         success {
             echo 'This will run only if successful'
