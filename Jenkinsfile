@@ -55,8 +55,8 @@ pipeline {
     post {
         always {
             echo 'This will always run'
-            archiveArtifacts 'build/libs/**/*.jar'
-            unit 'build/reports/**/*.xml'
+            archiveArtifacts 'target/**/*.jar'
+            junit 'target/**/*.xml'
         }
         success {
             echo 'This will run only if successful'
